@@ -1,0 +1,30 @@
+{
+    "data": {
+        "getPackListing": {
+            "data": {
+                "id": "e873ed8e-cf4e-44bd-b30e-281ae7a35093",
+                "price": "9.00000000",
+                "title": "Base Set (Series 2, Release 7)",
+                "remaining": 22783,
+                "totalPackCount": 25000,
+                "description": "Moments in pack: <br />- 3 Base Set (Series 2)<br /><br /><b>Base Set (Series 2, Release 7):</b> This is our seventh Series 2 release specifically dedicated to the Base Set, an excellent value for collectors of all levels. Each of these packs contain 3 Moments from the Series 2 Base Set. A perfect place to start, or to complete, your personal collection. (As a common pack, when these sell out we may make a new release available.)<br /><br /><b>Base Set</b> (Series 2): 133 Moments from 133 players in the 2020-21 NBA season.<br /><br />In this pack you’ll have the chance to snag epic rookie Moments like Lamelo Ball’s <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/d240a57b-01ed-4462-a35b-94d8cb1eec2a'>first career assist</a> for the Hornets, Tyrese Haliburton’s <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/5bedd7de-7b8f-4513-84b0-d3f1c4360064'>first career points</a> for the Kings, or a <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/bfd280cc-c84c-418d-bfb8-da08a90e1b3c'>slam</a> from James Wiseman’s Warriors debut.  Other Moments hiding in these packs include Kevin Durant’s long-awaited <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/6820585b-9448-44b6-a9c9-9c041d2a4648'>first bucket</a> as a member of the Brooklyn Nets, a <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/98c944a2-44a1-4fea-b26c-bf6f036441a5'>flashy dime</a> from Atlanta’s Trae Young, and an <a href='https://www.nbatopshot.com/edition/208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9/2d0fe5aa-617a-4492-89d2-faa125e4b196'>epic throwdown</a> from Los Angeles Lakers superstar LeBron James.<br /><br />View a <a href='https://docs.google.com/spreadsheets/d/1dul2KjlPb93wGDjImNqIZSrpV_eqWAlQxvdn0mFjUh0/edit?usp=sharing' target='_new'>complete list</a> of every Moment available in these time-limited packs (while supplies last). Any Moments in packs that remain unsold will be removed from packs and may be made available in future drops instead.",
+                "expiryDate": null,
+                "forSale": false,
+                "images": [
+                    {
+                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                        "type": "DEFAULT",
+                        "__typename": "PackListingImage"
+                    },
+                    {
+                        "url": "https://assets.nbatopshot.com/packs/backgrounds/e873ed8e-cf4e-44bd-b30e-281ae7a35093.jpg",
+                        "type": "BACKGROUND",
+                        "__typename": "PackListingImage"
+                    }
+                ],
+                "__typename": "PackListing"
+            },
+            "__typename": "GetPackListingResponse"
+        }
+    }
+}

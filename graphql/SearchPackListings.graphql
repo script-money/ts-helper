@@ -1,0 +1,31 @@
+query SearchPackListings($input: SearchPackListingsInput!) {
+  searchPackListings(input: $input) {
+    data {
+      searchSummary {
+        data {
+          ... on PackListings {
+            data {
+              id
+              price
+              title
+              remaining
+              totalPackCount
+              expiryDate
+              images {
+                type
+                url
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

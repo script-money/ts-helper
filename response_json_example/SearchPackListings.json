@@ -1,0 +1,564 @@
+{
+    "data": {
+        "searchPackListings": {
+            "data": {
+                "searchSummary": {
+                    "data": {
+                        "data": [
+                            {
+                                "id": "8979efd9-a776-4cff-9250-9533e5f5889c",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 6)",
+                                "remaining": 0,
+                                "totalPackCount": 25000,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/8979efd9-a776-4cff-9250-9533e5f5889c.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "ec3a3257-3e28-4f67-b128-089bee067640",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 5)",
+                                "remaining": 0,
+                                "totalPackCount": 25000,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/ec3a3257-3e28-4f67-b128-089bee067640.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "de7f2908-ac84-4332-9969-7caa7f78107f",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 4)",
+                                "remaining": 0,
+                                "totalPackCount": 27066,
+                                "expiryDate": "2021-01-19T17:00:00Z",
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/de7f2908-ac84-4332-9969-7caa7f78107f.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "6dd60347-e28f-4a6f-8a97-0094216f73ce",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 3)",
+                                "remaining": 0,
+                                "totalPackCount": 24767,
+                                "expiryDate": "2021-01-19T01:00:00Z",
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/6dd60347-e28f-4a6f-8a97-0094216f73ce.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "aba143b0-a10d-479e-b2a9-9a01f96fb996",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 1)",
+                                "remaining": 0,
+                                "totalPackCount": 26940,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/aba143b0-a10d-479e-b2a9-9a01f96fb996.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "de583f81-7bc7-4a49-a9f5-6b144650d1e7",
+                                "price": "9.00000000",
+                                "title": "Base Set (Series 2, Release 2)",
+                                "remaining": 0,
+                                "totalPackCount": 24767,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_2_base_set_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/de583f81-7bc7-4a49-a9f5-6b144650d1e7.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "8f68b34c-70ac-4f52-b876-97ed6b235684",
+                                "price": "12.00000000",
+                                "title": "Base Set (Series 1, Release 12)",
+                                "remaining": 0,
+                                "totalPackCount": 6021,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/8f68b34c-70ac-4f52-b876-97ed6b235684.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "7e38e984-1406-4ee6-bc8e-366c0bb061ef",
+                                "price": "12.00000000",
+                                "title": "Base Set (Series 1, Release 11)",
+                                "remaining": 0,
+                                "totalPackCount": 2340,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/7e38e984-1406-4ee6-bc8e-366c0bb061ef.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "49ebc14f-b3e8-48fa-b2d6-7cd12b7b76ca",
+                                "price": "12.00000000",
+                                "title": "Base Set (Series 1, Release 10)",
+                                "remaining": 0,
+                                "totalPackCount": 3626,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/49ebc14f-b3e8-48fa-b2d6-7cd12b7b76ca.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "6233f5fb-4b76-448a-b159-d036e7c9bf0e",
+                                "price": "230.00000000",
+                                "title": "Deck the Hoops",
+                                "remaining": 0,
+                                "totalPackCount": 935,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/legendary/pack_2_Deck_The_Hoops_legendary.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/6233f5fb-4b76-448a-b159-d036e7c9bf0e.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "0dcd190b-a171-43d9-a635-c4daaeaed772",
+                                "price": "23.00000000",
+                                "title": "Season Tip-off 2020-21 (Series 2)",
+                                "remaining": 0,
+                                "totalPackCount": 3150,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/rare/pack_2_season_tip-off_2020-21_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/0dcd190b-a171-43d9-a635-c4daaeaed772.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "bd4313cb-efb5-4973-934b-e9ec2d26c4c0",
+                                "price": "59.00000000",
+                                "title": "Run It Back 2013-14 (Series 1, Drop 3)",
+                                "remaining": 0,
+                                "totalPackCount": 2475,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/rare/pack_1_run_it_back_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/bd4313cb-efb5-4973-934b-e9ec2d26c4c0.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "98309b9a-57a7-411d-b022-5b6fd1b4252d",
+                                "price": "12.00000000",
+                                "title": "Base Set (Series 1, Release 5)",
+                                "remaining": 0,
+                                "totalPackCount": 392,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/98309b9a-57a7-411d-b022-5b6fd1b4252d.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "5303f711-6028-4a70-bf37-f1961553ddc7",
+                                "price": "59.00000000",
+                                "title": "Run It Back 2013-14 (Series 1, Drop 2)",
+                                "remaining": 0,
+                                "totalPackCount": 732,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/rare/pack_1_run_it_back_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/5303f711-6028-4a70-bf37-f1961553ddc7.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "fb0a45f7-4d26-4b5c-8cf7-9b0742824b1d",
+                                "price": "12.00000000",
+                                "title": "Base Set (Series 1, Release 4)",
+                                "remaining": 0,
+                                "totalPackCount": 392,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/fb0a45f7-4d26-4b5c-8cf7-9b0742824b1d.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "89ec1aa1-208c-4375-985c-ca0f9d178d61",
+                                "price": "24.00000000",
+                                "title": "Premium Pack (Series 1, Drop 3, Wave 2/2)",
+                                "remaining": 0,
+                                "totalPackCount": 3411,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/rare/pack_1_premium_pack_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/89ec1aa1-208c-4375-985c-ca0f9d178d61.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "e3afb38a-1593-43fb-9d99-5786c142479c",
+                                "price": "230.00000000",
+                                "title": "Lace 'Em Up (Series 1)",
+                                "remaining": 0,
+                                "totalPackCount": 2025,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/legendary/pack_1_lace_em_up_legendary.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/e3afb38a-1593-43fb-9d99-5786c142479c.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "e6ec08fb-a3e7-4823-a56f-02e4a315cead",
+                                "price": "9.00000000",
+                                "title": "Got Game (Series 1, Drop 4)",
+                                "remaining": 0,
+                                "totalPackCount": 4850,
+                                "expiryDate": "2020-12-01T01:00:00Z",
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_1_got_game_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/e6ec08fb-a3e7-4823-a56f-02e4a315cead.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "03f92891-e11d-4541-92eb-33edf10f63d5",
+                                "price": "9.00000000",
+                                "title": "Got Game (Series 1, Drop 2)",
+                                "remaining": 0,
+                                "totalPackCount": 4850,
+                                "expiryDate": "2020-11-16T20:00:00Z",
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/common/pack_1_got_game_common.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/03f92891-e11d-4541-92eb-33edf10f63d5.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "786a5811-ac0b-4631-9dc0-8ddf8fa230e7",
+                                "price": "230.00000000",
+                                "title": "2020 NBA Finals (Series 1)",
+                                "remaining": 0,
+                                "totalPackCount": 711,
+                                "expiryDate": "2020-10-27T00:00:00Z",
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/legendary/pack_1_2020_nba_finals_legendary.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/786a5811-ac0b-4631-9dc0-8ddf8fa230e7.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "c0c0653a-de54-441e-a7be-6a47dc932c18",
+                                "price": "24.00000000",
+                                "title": "Premium Pack (Series 1, Drop 4)",
+                                "remaining": 0,
+                                "totalPackCount": 1560,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/rare/pack_1_premium_pack_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/c0c0653a-de54-441e-a7be-6a47dc932c18.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "eebdf1ca-b568-4d61-b23a-69924ed2c48e",
+                                "price": "24.00000000",
+                                "title": "Premium Pack (Drop 3, Wave 1/2)",
+                                "remaining": 0,
+                                "totalPackCount": 3411,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/rare/pack_1_premium_pack_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/eebdf1ca-b568-4d61-b23a-69924ed2c48e.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "2eaa399d-e25b-4ad1-8e3c-b4c824ff1688",
+                                "price": "59.00000000",
+                                "title": "Rookie Debut (Drop 2)",
+                                "remaining": 0,
+                                "totalPackCount": 2250,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://asset-preview.nbatopshot.com/packs/rare/pack_1_rookie_debut_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/2eaa399d-e25b-4ad1-8e3c-b4c824ff1688.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "92324e29-9b8d-48a2-8e5b-8611bd9b0afa",
+                                "price": "12.00000000",
+                                "title": "Base Set (Release 3)",
+                                "remaining": 0,
+                                "totalPackCount": 920,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/common/pack_common_baseset.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/92324e29-9b8d-48a2-8e5b-8611bd9b0afa.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "bf3c2c86-18f8-49f4-85ae-04b661c34ea9",
+                                "price": "29.00000000",
+                                "title": "The Finals",
+                                "remaining": 0,
+                                "totalPackCount": 6750,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/rare/pack_1_the_finals_rare.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/bf3c2c86-18f8-49f4-85ae-04b661c34ea9.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            },
+                            {
+                                "id": "7bc1ead9-2d1a-498a-9b8b-acc2b7f7e925",
+                                "price": "230.00000000",
+                                "title": "Cosmic",
+                                "remaining": 0,
+                                "totalPackCount": 1470,
+                                "expiryDate": null,
+                                "images": [
+                                    {
+                                        "type": "DEFAULT",
+                                        "url": "https://assets.nbatopshot.com/packs/legendary/pack_1_cosmic_legendary.png",
+                                        "__typename": "PackListingImage"
+                                    },
+                                    {
+                                        "type": "BACKGROUND",
+                                        "url": "https://assets.nbatopshot.com/packs/backgrounds/7bc1ead9-2d1a-498a-9b8b-acc2b7f7e925.jpg",
+                                        "__typename": "PackListingImage"
+                                    }
+                                ],
+                                "__typename": "PackListing"
+                            }
+                        ],
+                        "__typename": "PackListings"
+                    },
+                    "__typename": "SearchSummary"
+                },
+                "__typename": "PackListingsSearchSummary"
+            },
+            "__typename": "SearchPackListingsResponse"
+        }
+    }
+}

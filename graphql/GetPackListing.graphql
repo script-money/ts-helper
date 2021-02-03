@@ -1,0 +1,21 @@
+query GetPackListing($input: GetPackListingInput!) {
+  getPackListing(input: $input) {
+    data {
+      id
+      price
+      title
+      remaining
+      totalPackCount
+      description
+      expiryDate
+      forSale
+      images {
+        url
+        type
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

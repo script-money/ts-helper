@@ -1,0 +1,114 @@
+query SearchMintedMoments(
+  $sortBy: MintedMomentSortType
+  $byOwnerDapperID: [String]
+  $bySets: [ID]
+  $bySeries: [ID]
+  $bySetVisuals: [VisualIdType]
+  $byPlayers: [ID]
+  $byPlays: [ID]
+  $byTeams: [ID]
+  $byForSale: ForSaleFilter
+  $searchInput: BaseSearchInput!
+) {
+  searchMintedMoments(
+    input: {
+      sortBy: $sortBy
+      filters: {
+        byOwnerDapperID: $byOwnerDapperID
+        bySets: $bySets
+        bySeries: $bySeries
+        bySetVisuals: $bySetVisuals
+        byPlayers: $byPlayers
+        byPlays: $byPlays
+        byTeams: $byTeams
+        byForSale: $byForSale
+      }
+      searchInput: $searchInput
+    }
+  ) {
+    data {
+      sortBy
+      filters {
+        byOwnerDapperID
+        bySets
+        bySeries
+        bySetVisuals
+        byPlayers
+        byPlays
+        byTeams
+        byForSale
+        __typename
+      }
+      searchSummary {
+        count {
+          count
+          __typename
+        }
+        pagination {
+          leftCursor
+          rightCursor
+          __typename
+        }
+        data {
+          ... on MintedMoments {
+            size
+            data {
+              ...MomentDetails
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+fragment MomentDetails on MintedMoment {
+  id
+  version
+  sortID
+  set {
+    id
+    flowName
+    flowSeriesNumber
+    setVisualId
+    __typename
+  }
+  setPlay {
+    ID
+    flowRetired
+    circulationCount
+    __typename
+  }
+  assetPathPrefix
+  play {
+    id
+    stats {
+      playerID
+      playerName
+      primaryPosition
+      teamAtMomentNbaId
+      teamAtMoment
+      dateOfMoment
+      playCategory
+      __typename
+    }
+    __typename
+  }
+  price
+  listingOrderID
+  flowId
+  owner {
+    dapperID
+    username
+    profileImageUrl
+    __typename
+  }
+  flowSerialNumber
+  forSale
+  __typename
+}

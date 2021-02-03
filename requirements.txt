@@ -1,0 +1,4 @@
+selenium==3.141.0
+pyzmq>=20.0.0
+python-dotenv==0.15.0
+httpx==0.16.1

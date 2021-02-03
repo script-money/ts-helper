@@ -1,0 +1,24 @@
+query GetCodex($input: GetCodexInput!) {
+  getCodex(input: $input) {
+    codex {
+      set {
+        id
+        flowName
+        flowLocked
+        assetPath
+        setVisualId
+        __typename
+      }
+      totalEditionSlots
+      filledEditionSlots
+      uniqueMoments
+      hasChallengeReward
+      __typename
+    }
+    numSetsInProgress
+    numSetsCompleted
+    totalUserOwnedMoments
+    totalUniqueEditionsOwned
+    __typename
+  }
+}

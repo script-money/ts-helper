@@ -1,0 +1,55 @@
+query GetCodexSet($input: GetCodexSetInput!) {
+  getCodexSet(input: $input) {
+    codexSetWithEditions {
+      codexSet {
+        set {
+          id
+          flowName
+          assetPath
+          flowLocked
+          setVisualId
+          __typename
+        }
+        totalEditionSlots
+        filledEditionSlots
+        uniqueMoments
+        hasChallengeReward
+        __typename
+      }
+      editionSlots {
+        edition {
+          id
+          set {
+            id
+            flowName
+            flowLocked
+            flowSeriesNumber
+            assetPath
+            __typename
+          }
+          play {
+            id
+            stats {
+              playerID
+              playerName
+              playCategory
+              dateOfMoment
+              __typename
+            }
+            __typename
+          }
+          circulationCount
+          flowRetired
+          assetPathPrefix
+          state
+          challengeID
+          __typename
+        }
+        filledMomentIDs
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

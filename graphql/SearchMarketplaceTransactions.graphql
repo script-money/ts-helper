@@ -1,0 +1,82 @@
+query SearchMarketplaceTransactions(
+  $input: SearchMarketplaceTransactionsInput!
+) {
+  searchMarketplaceTransactions(input: $input) {
+    data {
+      searchSummary {
+        pagination {
+          rightCursor
+          __typename
+        }
+        data {
+          ... on MarketplaceTransactions {
+            size
+            data {
+              ... on MarketplaceTransaction {
+                id
+                sortID
+                seller {
+                  ...UserFragment
+                  __typename
+                }
+                buyer {
+                  ...UserFragment
+                  __typename
+                }
+                price
+                moment {
+                  assetPathPrefix
+                  flowSerialNumber
+                  id
+                  play {
+                    id
+                    stats {
+                      playerName
+                      dateOfMoment
+                      playCategory
+                      teamAtMomentNbaId
+                      teamAtMoment
+                      jerseyNumber
+                      __typename
+                    }
+                    __typename
+                  }
+                  set {
+                    id
+                    flowName
+                    flowSeriesNumber
+                    setVisualId
+                    __typename
+                  }
+                  setPlay {
+                    ID
+                    circulationCount
+                    flowRetired
+                    __typename
+                  }
+                  __typename
+                }
+                txHash
+                updatedAt
+                __typename
+              }
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+fragment UserFragment on UserPublicInfo {
+  dapperID
+  flowAddress
+  username
+  profileImageUrl
+  __typename
+}
