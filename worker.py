@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
 import re
 from enum import Enum
 
@@ -19,12 +20,17 @@ class Worker:
         self.account = account
         self.password = password
         self.username = ""
+        self.headless = True
         capa = DesiredCapabilities.CHROME
+        chrome_options = Options()
+        if self.headless:
+            chrome_options.add_argument('--headless')
+            chrome_options.add_argument('--disable-gpu')
+            chrome_options.add_argument("--window-size=1280, 800")  
         capa["pageLoadStrategy"] = "eager"
-        # TODO add setting spend up chrome
-        self.driver = webdriver.Chrome(desired_capabilities=capa)
+        self.driver = webdriver.Chrome(
+            desired_capabilities=capa, chrome_options=chrome_options)
         self.wait = WebDriverWait(self.driver, 60)
-        # self.driver.set_window_size(1042 ,622)
     def launch(self):
         self.is_busy = True
         self.driver.get("https://www.nbatopshot.com/marketplace")
@@ -58,7 +64,6 @@ class Worker:
             print('登陆账号成功')
         except Exception as e:
             print(f"登陆时出错，错误为{e}")
-            # TODO 尝试重新登陆
             self.driver.close()
         finally:  
             self.is_busy = False
@@ -107,16 +112,18 @@ class Worker:
                 except:
                     self.driver.execute_script("window.scrollBy(0,100)")
                     pass
-            # dapper里点击购买 TODO ubuntu下无法点击购买按钮
-            element_dapper_pay = self.wait.until(
+            self.wait.until(
                 EC.presence_of_element_located(
-                    (By.XPATH, "//button[@type='button']"))
+                    (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
             )
-            element_dapper_pay.click()
+            self.driver.find_element_by_xpath("//button[@type='button']").click()
+
             self.wait.until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
             )
+            print(
+                f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:
             print(f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 失败, 错误是{e}')
         finally:

@@ -9,13 +9,13 @@ import random
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
-# SETID = "ad8e85a4-2240-4604-95f6-be826966d988" # cool cat
-# PLAYIDS = ["58f19b13-6b92-40e5-90d2-7e0de29be912", "6fa60eb1-d1c3-4d4c-952c-fde0136e4c83", "d690974d-5399-4775-b7ff-9f3c076f0719", "dc7e06d0-18d5-461d-a67d-127a06d885ca", "f1fc302c-376b-4206-8d18-b110fa5ed1e9"]
-# TARGET_PRICE = 140
+SETID = "ad8e85a4-2240-4604-95f6-be826966d988" # cool cat
+PLAYIDS = ["58f19b13-6b92-40e5-90d2-7e0de29be912", "6fa60eb1-d1c3-4d4c-952c-fde0136e4c83", "d690974d-5399-4775-b7ff-9f3c076f0719", "dc7e06d0-18d5-461d-a67d-127a06d885ca", "f1fc302c-376b-4206-8d18-b110fa5ed1e9"]
+TARGET_PRICE = 140
 
-SETID = "208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9"  # base set 2
-PLAYIDS = ["d07c7e9a-8b73-42d6-ba69-1f128b1641eb"] # clark
-TARGET_PRICE = 6
+# SETID = "208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9"  # base set 2
+# PLAYIDS = ["d07c7e9a-8b73-42d6-ba69-1f128b1641eb"] # clark
+# TARGET_PRICE = 5
 
 url = "https://api.nba.dapperlabs.com/marketplace/graphql?GetUserMomentListings"
 
