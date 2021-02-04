@@ -27,14 +27,14 @@ def worker(_name, _account, _password, _queue):
 
 def main():
     load_dotenv('.env')
-    max_thread = 2 # 开几个selenium
+    max_thread = 1 # 开几个selenium
     queue_size = 10
     queue_instance = queue.Queue(queue_size)
 
     context = zmq.Context()
 
     socket = context.socket(zmq.SUB)
-    socket.connect('tcp://127.0.0.1:6666')
+    socket.connect('tcp://0.0.0.0:6666')
     socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
     account, password = check_account()

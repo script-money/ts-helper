@@ -21,9 +21,10 @@ class Worker:
         self.username = ""
         capa = DesiredCapabilities.CHROME
         capa["pageLoadStrategy"] = "eager"
+        # TODO add setting spend up chrome
         self.driver = webdriver.Chrome(desired_capabilities=capa)
         self.wait = WebDriverWait(self.driver, 60)
-
+        # self.driver.set_window_size(1042 ,622)
     def launch(self):
         self.is_busy = True
         self.driver.get("https://www.nbatopshot.com/marketplace")
@@ -90,7 +91,7 @@ class Worker:
             self.driver.execute_script("window.open('');")
             tab = self.driver.window_handles[-1]
             self.driver.switch_to.window(tab)
-            self.driver.get(moment_listings_url)    
+            self.driver.get(moment_listings_url)
             # 瞬间页里点击购买
             element_buy = self.wait.until(
                 EC.presence_of_element_located(
@@ -106,10 +107,10 @@ class Worker:
                 except:
                     self.driver.execute_script("window.scrollBy(0,100)")
                     pass
-            # dapper里点击购买
+            # dapper里点击购买 TODO ubuntu下无法点击购买按钮
             element_dapper_pay = self.wait.until(
-                EC.element_to_be_clickable(
-                    (By.CSS_SELECTOR, 'button.css-u0hnk9'))
+                EC.presence_of_element_located(
+                    (By.XPATH, "//button[@type='button']"))
             )
             element_dapper_pay.click()
             self.wait.until(
