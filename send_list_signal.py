@@ -5,7 +5,10 @@ import time
 import zmq
 from typing import List, Dict
 from datetime import datetime
+import logging
 # asyncio.log.logger.setLevel(logging.ERROR)
+
+logger = logging.getLogger(__name__)
 
 BYSET = "208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9" # base series 2
 BYPLAYERS = "1629634"  # clarke
@@ -55,13 +58,13 @@ def main(is_delist=False):
     socket = context.socket(zmq.PUB)
     socket.bind('tcp://*:6666')
     socket.send_string('hello')
-    print(f"send: hello")
+    logger.info(f"send: hello")
     time.sleep(1)
     # send once
     response_json = httpx.post(url, data=payload, headers=headers).json()
     moments = get_moments_id(response_json, is_delist)
     if len(moments) == 0:
-        print("要操作的moments为空")
+        logger.info("要操作的moments为空")
     else:
         for moment in moments:
             if not is_delist: 
@@ -69,11 +72,11 @@ def main(is_delist=False):
             else:
                 signal = '2'+' '+moment+' '+str(int(datetime.timestamp(datetime.now())))
             if r.get(signal) is None:
-                print(f"send: {signal}")
+                logger.info(f"send: {signal}")
                 socket.send_string(signal)
                 r.set(signal, 1)
             else:
-                print(f'{signal} has sent, skip')
+                logger.info(f'{signal} has sent, skip')
             time.sleep(10)
 
 main(is_delist=False)

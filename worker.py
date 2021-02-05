@@ -7,6 +7,10 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.options import Options
 import re
 from enum import Enum
+import logging
+from exceptions import RegionNotAvaliableException
+
+logger = logging.getLogger(__name__)
 
 class Signal(Enum):
     BUY = 0,
@@ -32,11 +36,15 @@ class Worker:
             desired_capabilities=capa, chrome_options=chrome_options)
         self.wait = WebDriverWait(self.driver, 60)
     def launch(self):
+        logger.info(f"headless mode: {self.headless}")
         self.is_busy = True
-        self.driver.get("https://www.nbatopshot.com/marketplace")
-
         # 登陆到dapper
         try:
+            self.driver.get("https://www.nbatopshot.com/marketplace")
+            if self.driver.title == "Not available in your region":
+                logger.warning("请切换美国代理")
+                raise RegionNotAvaliableException("Not available in your region")
+
             login_element = self.wait.until(
                 EC.element_to_be_clickable(
                     (By.XPATH, "//span[contains(text(),'Log In')]"))
@@ -61,9 +69,9 @@ class Worker:
             regex = re.compile(r'@(\w+)')
             mo = regex.search(user_name_href)
             self.username = mo.group(1)
-            print('登陆账号成功')
+            logger.info('登陆账号成功')
         except Exception as e:
-            print(f"登陆时出错，错误为{e}")
+            logger.error(f"登陆时出错，错误为{e}")
             self.driver.close()
         finally:  
             self.is_busy = False
@@ -82,11 +90,11 @@ class Worker:
         elif signal == 2:
             self.delist_moment(args[0])
         else:
-            print(f'无法解析信号:{signal}')
+            logger.warning(f'无法解析信号:{signal}')
 
     def buy(self, set_ID, play_ID, serial_number):
         if not (set_ID or play_ID or serial_number):
-            print('请输入set_ID/play_ID/serial_number')
+            logger.warning('请输入set_ID/play_ID/serial_number')
             return
 
         moment_listings_url = f"https://www.nbatopshot.com/listings/p2p/{set_ID}+{play_ID}?serialNumber={serial_number}"
@@ -122,10 +130,11 @@ class Worker:
                 EC.presence_of_element_located(
                     (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
             )
-            print(
+            logger.info(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:
-            print(f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 失败, 错误是{e}')
+            logger.warning(
+                f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 失败, 错误是{e}')
         finally:
             self.driver.close()
             self.switch_to_tab(0)
@@ -134,7 +143,7 @@ class Worker:
 
     def list_moment(self, moment_id, targetPrice):
         if not (moment_id or targetPrice):
-            print('请输入moment_id/targetPrice')
+            logger.warning('请输入moment_id/targetPrice')
             return
         try:
             self.is_busy = True
@@ -163,9 +172,9 @@ class Worker:
             confirm_button.click()
             time.sleep(1)
             self.driver.close()
-            print(f"上架完成，回到准备状态")
-        except Exception:
-            print(f'上架 {moment_id} 出现异常')
+            logger.info(f"上架完成，回到准备状态")
+        except Exception as e:
+            logger.warn(f'上架 {moment_id} 出现异常: {e}')
         finally:
             self.driver.close()
             time.sleep(1)
@@ -178,7 +187,7 @@ class Worker:
 
     def delist_moment(self, moment_id):
         if not moment_id:
-            print('请输入下架的moment_id')
+            logger.warning('请输入下架的moment_id')
             return  
         try:
             self.is_busy = True
@@ -199,9 +208,9 @@ class Worker:
             )
             confirm_button.click()
             time.sleep(3)
-            print(f"下架完成，回到准备状态")
+            logger.info(f"下架完成，回到准备状态")
         except Exception as e:
-            print(f'下架 {moment_id} 出现异常,错误为{e}')
+            logger.warning(f'下架 {moment_id} 出现异常,错误为{e}')
         finally:
             # TODO Message: invalid session id
             self.driver.close()

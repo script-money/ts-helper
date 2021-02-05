@@ -6,7 +6,9 @@ from typing import List
 import time
 import redis
 import random
+import logging
 
+logger = logging.getLogger(__name__)
 asyncio.log.logger.setLevel(logging.ERROR)
 
 SETID = "ad8e85a4-2240-4604-95f6-be826966d988" # cool cat
@@ -60,28 +62,13 @@ async def process(play_id, client, socket, redis_client):
             for n in buy_number_list: # 测试时加上[:1]
                 signal = '0'+' '+SETID+' '+play_id+' '+str(n)
                 if redis_client.get(signal) is None:
-                    print(f"send: {signal}")
+                    logger.info(f"send: {signal}")
                     socket.send_string(signal)
                     redis_client.set(signal, 1)
                 else:
-                    print(f'{signal} has sent, skip')
-    except httpx.ProxyError:
-        print("请求proxy错误")
-        return []
-    except httpx.ReadTimeout:
-        print("请求超时")
-        return []
-    except httpx.RemoteProtocolError:
-        print("请求被远程关闭")
-        return []
-    except httpx.ConnectTimeout:
-        print("连接超时")
-        return [] 
-    except httpx.ConnectError:
-        print("连接异常")
-        return []  # TODO 用更好的方式处理异常，实现日志功能
-    except httpx.ReadError:
-        print("读取异常")
+                    logger.info(f'{signal} has sent, skip')
+    except Exception as e:
+        logger.warning(f"httpx request error: {e}")
         return []
     return buy_number_list
 
@@ -95,7 +82,7 @@ async def main():
     async with httpx.AsyncClient() as client:
         while True:
             for buy_number_list in await asyncio.gather(*[process(PLAYID, client, socket, redis_client) for PLAYID in PLAYIDS]):
-                print(buy_number_list)
+                logger.debug(f"Buy list is {buy_number_list}")
             time.sleep(random.uniform(7,12))
 
 asyncio.run(main())

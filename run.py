@@ -1,15 +1,19 @@
 import zmq
+import sys
+import logging
 from worker import Worker
 import threading
 import queue
 import os
 from dotenv import load_dotenv
+from loggers import setup_logging_pre
+
+logger = logging.getLogger('selenium_runner')
 
 def check_account():
     account = os.getenv('DAPPER_ACCOUNT')
     password = os.getenv('DAPPER_PASSWORD')
     if (account is None) or (password is None):
-        print('请在.env中填入账号密码')
         return None, None
     return account, password
 
@@ -24,37 +28,47 @@ def worker(_name, _account, _password, _queue):
             parameters = op.split(' ')
             sub_worker.dispatcher(parameters[0], parameters[1:])
            
-
 def main():
-    load_dotenv('.env')
-    max_thread = 1 # 开几个selenium
-    queue_size = 10
-    queue_instance = queue.Queue(queue_size)
+    return_code = 1
+    try:
+        load_dotenv('.env')
+        setup_logging_pre()
+        max_thread = 1 # 开几个selenium
+        queue_size = 10
+        logger.info(
+            f'selenium worker number is {max_thread}, task queue size is {queue_size}')
+        queue_instance = queue.Queue(queue_size)
 
-    context = zmq.Context()
+        context = zmq.Context()
 
-    socket = context.socket(zmq.SUB)
-    socket.connect('tcp://0.0.0.0:6666')
-    socket.setsockopt_string(zmq.SUBSCRIBE, '')
+        socket = context.socket(zmq.SUB)
+        socket.connect('tcp://0.0.0.0:6666')
+        socket.setsockopt_string(zmq.SUBSCRIBE, '')
 
-    account, password = check_account()
-    if account is None or password is None:
-        # TODO 有概率出现报错
-        return
+        account, password = check_account()
+        if account is None or password is None:
+            logger.error('please set account and password in .env')
+            raise SystemExit
 
-    for t in range(max_thread):
-        threading.Thread(target=worker, args=(
-            t, account, password, queue_instance), daemon=True).start()
+        for t in range(max_thread):
+            threading.Thread(target=worker, args=(
+                t, account, password, queue_instance), daemon=True).start()
 
-    while True:
-        msg = socket.recv()
-        print('\n')
-        print(msg)
-        try:
-            queue_instance.put(msg, block=True, timeout=5)
-        except queue.Full:
-            print("队列已满,退出")
-            # break
-
+        while True:
+            msg = socket.recv()
+            logger.info(f"recieve message: {msg}")
+            try:
+                queue_instance.put(msg, block=True, timeout=5)
+            except queue.Full:
+                logger.warning('Task queue is full')                
+    except KeyboardInterrupt:
+        logger.info('SIGINT received, aborting ...')
+        return_code = 0
+    except SystemExit as e:
+        return_code = e
+    except Exception as exp:
+        logger.exception(f"Fatal exception:{exp}")
+    finally:
+        sys.exit(return_code)
 
 main()
