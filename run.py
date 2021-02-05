@@ -7,6 +7,7 @@ import queue
 import os
 from dotenv import load_dotenv
 from loggers import setup_logging_pre
+from pid.decorator import pidfile
 
 logger = logging.getLogger('selenium_runner')
 
@@ -27,7 +28,8 @@ def worker(_name, _account, _password, _queue):
             op = str(signal, 'utf_8')
             parameters = op.split(' ')
             sub_worker.dispatcher(parameters[0], parameters[1:])
-           
+
+@pidfile()         
 def main():
     return_code = 1
     try:
