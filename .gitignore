@@ -151,3 +151,4 @@ pyrightconfig.json
 data/*.h5
 
 .DS_Store
+.log
