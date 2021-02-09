@@ -24,7 +24,7 @@ class Worker:
         self.account = account
         self.password = password
         self.username = ""
-        self.headless = True
+        self.headless = False
         capa = DesiredCapabilities.CHROME
         chrome_options = Options()
         if self.headless:

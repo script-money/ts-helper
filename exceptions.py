@@ -9,3 +9,9 @@ class RegionNotAvaliableException(Exception):
     """
     RegionNotAvaliable exception.
     """
+
+
+class HttpxRequestException(Exception):
+    """
+    Httpx client post exception
+    """

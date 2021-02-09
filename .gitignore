@@ -147,3 +147,7 @@ cython_debug/
 
 chromedriver.exe
 pyrightconfig.json
+
+data/*.h5
+
+.DS_Store

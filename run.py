@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 from loggers import setup_logging_pre
 from pid.decorator import pidfile
+from pid.base import PidFileAlreadyLockedError
 
 logger = logging.getLogger('selenium_runner')
 
@@ -34,7 +35,6 @@ def main():
     return_code = 1
     try:
         load_dotenv('.env')
-        setup_logging_pre()
         max_thread = 1 # 开几个selenium
         queue_size = 10
         logger.info(
@@ -73,4 +73,8 @@ def main():
     finally:
         sys.exit(return_code)
 
-main()
+try:
+    setup_logging_pre()
+    main()
+except PidFileAlreadyLockedError:
+    logger.error("run.py is running already")
