@@ -10,6 +10,7 @@ from statistics import mean
 import pandas as pd
 from datetime import datetime
 from time import perf_counter
+import os
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
@@ -327,8 +328,13 @@ async def get_all_play_info():
                     except Exception:
                         logger.info(f'获取 {set_id} 失败，重试')
 
-            df.to_hdf(f'data/{str(datetime.date.today())}.h5',key='transaction_info', mode='w')
             get_codex_result = set_ids
+            if not os.path.exists('data'):
+                os.makedirs('data')
+            try:           
+                df.to_hdf(f'data/{str(datetime.date.today())}.h5',key='transaction_info', mode='w')
+            except Exception as e:
+                logger.error(f'保存hdf失败，错误是{e}')
         except:
             logger.info(f'获取包信息失败，重试')
     time_end = perf_counter()
