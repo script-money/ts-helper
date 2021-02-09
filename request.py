@@ -8,7 +8,7 @@ import asyncio
 from itertools import groupby
 from statistics import mean
 import pandas as pd
-from datetime import datetime
+from datetime import date
 from time import perf_counter
 import os
 
@@ -282,9 +282,13 @@ async def get_all_play_info():
     遍历set请求所有play的信息，获取的dataframe存在data文件夹，用于数据分析
     """
     time_start = perf_counter()
+
+    if not os.path.exists('data'):
+        os.makedirs('data')
+
     try:
         df = pd.read_hdf(
-            f'data/{str(datetime.date.today())}.h5', key='transaction_info')
+            f'data/{str(date.today())}.h5', key='play_infos')
     except:
         df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
                                    "circulation_count", "adjust_volume", "combine_transaction"])
@@ -329,10 +333,9 @@ async def get_all_play_info():
                         logger.info(f'获取 {set_id} 失败，重试')
 
             get_codex_result = set_ids
-            if not os.path.exists('data'):
-                os.makedirs('data')
+
             try:           
-                df.to_hdf(f'data/{str(datetime.date.today())}.h5',key='transaction_info', mode='w')
+                df.to_hdf(f'data/{str(date.today())}.h5',key='play_infos', mode='w')
             except Exception as e:
                 logger.error(f'保存hdf失败，错误是{e}')
         except:
