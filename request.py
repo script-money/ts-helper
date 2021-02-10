@@ -291,7 +291,7 @@ async def get_all_play_info():
             f'data/{str(date.today())}.h5', key='play_infos')
     except:
         df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
-                                   "circulation_count", "adjust_volume", "combine_transaction"])
+                                   "circulation_count", "adjust_volume", "recent_transaction", "highest_transaction"])
     get_codex_result = None
     while get_codex_result is None:
         try:
@@ -309,10 +309,12 @@ async def get_all_play_info():
                                 try:
                                     result1 = await get_transactions(*id_pair)
                                     result2 = await get_transactions(*id_pair, by_highest=True)
-                                    combine_history = sorted(
-                                        list(set(result1[0]) | set(result2[0])), key=lambda a: a[1], reverse=True)
-                                    combine_history = [(key, int(mean(map(lambda k:k[1], list(group)))))
-                                                    for key, group in groupby(combine_history, lambda x: x[0])]
+                                    # combine_history = sorted(
+                                    #     list(set(result1[0]) | set(result2[0])), key=lambda a: a[1], reverse=True)
+                                    # combine_history = [(key, int(mean(map(lambda k:k[1], list(group)))))
+                                    #                 for key, group in groupby(combine_history, lambda x: x[0])]
+                                    recent_transaction = result1[0]
+                                    highest_transaction = result2[0]
                                     df = df.append({
                                         "set_id": id_pair[0],
                                         "play_id": id_pair[1],
@@ -320,9 +322,10 @@ async def get_all_play_info():
                                         "jersey_number": result1[4],
                                         "circulation_count": result1[2],
                                         "adjust_volume": result1[1],
-                                        "combine_transaction": combine_history
+                                        "recent_transaction": recent_transaction,
+                                        "highest_transaction": highest_transaction
                                     }, ignore_index=True)
-                                    result = combine_history
+                                    result = True
                                     logger.info(
                                         f'处理 {id_pair[0]}+{id_pair[1]} 成功')
                                 except Exception:
