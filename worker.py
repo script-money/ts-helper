@@ -29,6 +29,8 @@ class Worker:
         chrome_options = Options()
         if self.headless:
             chrome_options.add_argument('--headless')
+            chrome_options.add_argument(
+                '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 11_2_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.50"')
             chrome_options.add_argument('--disable-gpu')
             chrome_options.add_argument("--window-size=1280, 800")  
         capa["pageLoadStrategy"] = "eager"
@@ -72,6 +74,7 @@ class Worker:
             logger.info('登陆账号成功')
         except Exception as e:
             logger.error(f"登陆时出错，错误为{e}")
+            self.driver.save_screenshot('error_screenshot.png')
             self.driver.close()
         finally:  
             self.is_busy = False
@@ -125,7 +128,6 @@ class Worker:
                     (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
             )
             self.driver.find_element_by_xpath("//button[@type='button']").click()
-
             self.wait.until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))

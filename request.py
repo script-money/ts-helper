@@ -121,7 +121,7 @@ async def get_moment_listings(set_id, play_id) -> List:
                 "playID": play_id
             }
         },
-        "query": open('graphql/SearchMomentListingsDefault.graphql').read()
+        "query": open('graphql/GetUserMomentListings.graphql').read()
     }
     try:
         async with httpx.AsyncClient() as client:
