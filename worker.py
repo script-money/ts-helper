@@ -46,7 +46,6 @@ class Worker:
             if self.driver.title == "Not available in your region":
                 logger.warning("请切换美国代理")
                 raise RegionNotAvaliableException("Not available in your region")
-
             login_element = self.wait.until(
                 EC.element_to_be_clickable(
                     (By.XPATH, "//span[contains(text(),'Log In')]"))
