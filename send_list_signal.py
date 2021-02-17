@@ -6,15 +6,17 @@ import zmq
 from typing import List, Dict
 from datetime import datetime
 import logging
+from loggers import setup_logging_pre
 # asyncio.log.logger.setLevel(logging.ERROR)
 
 logger = logging.getLogger(__name__)
 
 BYSET = "208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9" # base series 2
 BYPLAYERS = "1629634"  # clarke
-TARGET_PRICE = 10
+TARGET_PRICE = 17
 
-USER_ID = 'auth0|5ff110779d0613006feebba4' # multivac
+# USER_ID = 'auth0|5ff10ff500625e0068d1855f'  # Crypto_Goya
+USER_ID = 'auth0|5ff110779d0613006feebba4'  # multivac
 
 url = "https://api.nba.dapperlabs.com/marketplace/graphql?SearchMintedMoments"
 
@@ -29,12 +31,12 @@ gql_dict = {
         "byPlayers": [BYPLAYERS],
         "byPlays": [], 
         "byTeams": [], 
-        "byForSale": None, 
+        "byForSale": "NOT_FOR_SALE",
         "searchInput": {
             "pagination": {
                 "cursor": "", 
                 "direction": "RIGHT", 
-                "limit": 50 # TODO 先获取库存总量，异步分段请求，组合成一个list再发信号
+                "limit": 50 
             }
         }
     },
@@ -53,6 +55,7 @@ def get_moments_id(res_json: Dict, is_for_sale: bool = False) -> List:
     return list(map(lambda j: j['id'], filter(lambda i: i['forSale'] if is_for_sale else not i['forSale'], search_filed)))
 
 def main(is_delist=False):
+    setup_logging_pre()
     r = redis.Redis(host='localhost', port=6379, db=0)
     context = zmq.Context()
     socket = context.socket(zmq.PUB)

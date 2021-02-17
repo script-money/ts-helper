@@ -172,16 +172,15 @@ class Worker:
                     (By.XPATH, "//button[contains(text(), 'Confirm')]"))
             )
             confirm_button.click()
-            time.sleep(1)
-            self.driver.close()
+            time.sleep(5)
             logger.info(f"上架完成，回到准备状态")
         except Exception as e:
             logger.warn(f'上架 {moment_id} 出现异常: {e}')
         finally:
             self.driver.close()
-            time.sleep(1)
-            self.switch_to_tab(1)
-            self.driver.close()
+            # time.sleep(1)
+            # self.switch_to_tab(1)
+            # self.driver.close()
             time.sleep(1)
             self.switch_to_tab(0)
             self.is_busy = False
