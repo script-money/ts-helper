@@ -153,3 +153,4 @@ data/*.h5
 .DS_Store
 .log
 error_screenshot.png
+chromedriver
