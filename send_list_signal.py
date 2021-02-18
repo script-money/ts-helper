@@ -50,11 +50,11 @@ headers = {
     'Cookie': '__cfduid=d068ddb63fc40817e27b55680431714031611305999'
 }
 
-def get_moments_id(res_json: Dict, is_for_sale: bool = False) -> List:
+def get_moments_id(res_json: Dict) -> List:
     search_filed = res_json['data']['searchMintedMoments']['data']['searchSummary']['data']['data']
-    return list(map(lambda j: j['id'], filter(lambda i: i['forSale'] if is_for_sale else not i['forSale'], search_filed)))
+    return list(map(lambda j: j['id'], filter(lambda i:  not i['forSale'], search_filed)))
 
-def main(is_delist=False):
+def main():
     setup_logging_pre()
     r = redis.Redis(host='localhost', port=6379, db=0)
     context = zmq.Context()
@@ -65,15 +65,12 @@ def main(is_delist=False):
     time.sleep(1)
     # send once
     response_json = httpx.post(url, data=payload, headers=headers).json()
-    moments = get_moments_id(response_json, is_delist)
+    moments = get_moments_id(response_json)
     if len(moments) == 0:
         logger.info("要操作的moments为空")
     else:
         for moment in moments:
-            if not is_delist: 
-                signal = '1'+' '+moment+' '+str(TARGET_PRICE)
-            else:
-                signal = '2'+' '+moment+' '+str(int(datetime.timestamp(datetime.now())))
+            signal = '1'+' '+moment+' '+str(TARGET_PRICE)
             if r.get(signal) is None:
                 logger.info(f"send: {signal}")
                 socket.send_string(signal)
@@ -82,4 +79,4 @@ def main(is_delist=False):
                 logger.info(f'{signal} has sent, skip')
             time.sleep(10)
 
-main(is_delist=False)
+main()
