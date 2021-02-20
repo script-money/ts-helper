@@ -125,7 +125,10 @@ async def get_moment_listings(set_id, play_id) -> List:
         async with httpx.AsyncClient() as client:
             r = await client.post(url, data=json.dumps(payload), headers=headers)
             response_json = r.json()
-            return response_json['data']['getUserMomentListings']['data']['momentListings']
+            result = response_json['data']['getUserMomentListings']
+            if result is None:
+                return []
+            return result['data']['momentListings']
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
@@ -309,7 +312,7 @@ async def get_all_play_info():
                                     result1 = await get_transactions(*id_pair)
                                     result2 = await get_transactions(*id_pair, by_highest=True)
                                     moment_listing = await get_moment_listings(*id_pair)
-                                    low_list_price = float(moment_listing[0]['moment']['price'])
+                                    low_list_price = float(moment_listing[0]['moment']['price']) if len(moment_listing) != 0 else 0
                                     recent_transaction = result1[0]
                                     highest_transaction = result2[0]
                                     df = df.append({
@@ -341,7 +344,7 @@ async def get_all_play_info():
                 logger.error(f'保存hdf失败，错误是{e}')
         except:
             logger.info(f'获取包信息失败，可能是服务器维护，等待10分钟后重试')
-            asyncio.sleep(60*10)
+            await asyncio.sleep(60*10)
     time_end = perf_counter()
     logger.info(f'花费了{time_end-time_start:.2f}秒')
 
