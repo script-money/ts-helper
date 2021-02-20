@@ -5,10 +5,8 @@ from exceptions import HttpxRequestException
 from utils import calculate_adjust_volume
 import json
 import asyncio
-from itertools import groupby
-from statistics import mean
 import pandas as pd
-from datetime import date
+from datetime import datetime
 from time import perf_counter
 import os
 
@@ -288,10 +286,11 @@ async def get_all_play_info():
 
     try:
         df = pd.read_hdf(
-            f'data/{str(date.today())}.h5', key='play_infos')
+            f'data/{datetime.now().strftime("%Y-%m-%d-%H")}.h5', key='play_infos')
     except:
         df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
-                                   "circulation_count", "adjust_volume", "recent_transaction", "highest_transaction"])
+                                   "circulation_count", "adjust_volume", "recent_transaction", 
+                                   "highest_transaction", "low_list_price"])
     get_codex_result = None
     while get_codex_result is None:
         try:
@@ -309,10 +308,8 @@ async def get_all_play_info():
                                 try:
                                     result1 = await get_transactions(*id_pair)
                                     result2 = await get_transactions(*id_pair, by_highest=True)
-                                    # combine_history = sorted(
-                                    #     list(set(result1[0]) | set(result2[0])), key=lambda a: a[1], reverse=True)
-                                    # combine_history = [(key, int(mean(map(lambda k:k[1], list(group)))))
-                                    #                 for key, group in groupby(combine_history, lambda x: x[0])]
+                                    moment_listing = await get_moment_listings(*id_pair)
+                                    low_list_price = float(moment_listing[0]['moment']['price'])
                                     recent_transaction = result1[0]
                                     highest_transaction = result2[0]
                                     df = df.append({
@@ -323,7 +320,8 @@ async def get_all_play_info():
                                         "circulation_count": result1[2],
                                         "adjust_volume": result1[1],
                                         "recent_transaction": recent_transaction,
-                                        "highest_transaction": highest_transaction
+                                        "highest_transaction": highest_transaction,
+                                        "low_list_price": low_list_price
                                     }, ignore_index=True)
                                     result = True
                                     logger.info(
@@ -338,13 +336,14 @@ async def get_all_play_info():
             get_codex_result = set_ids
 
             try:           
-                df.to_hdf(f'data/{str(date.today())}.h5',key='play_infos', mode='w')
+                df.to_hdf(f'data/{datetime.now().strftime("%Y-%m-%d-%H")}.h5', key='play_infos', mode='w')
             except Exception as e:
                 logger.error(f'保存hdf失败，错误是{e}')
         except:
-            logger.info(f'获取包信息失败，重试')
+            logger.info(f'获取包信息失败，可能是服务器维护，等待10分钟后重试')
+            asyncio.sleep(60*10)
     time_end = perf_counter()
-    logger.info(f'花费了{time_end-time_start}时间')
+    logger.info(f'花费了{time_end-time_start:.2f}秒')
 
 async def get_codex_info() -> Dict[str, Tuple[str, str]]:
     """
