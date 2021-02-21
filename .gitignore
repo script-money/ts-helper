@@ -154,3 +154,4 @@ data/*.h5
 .log
 error_screenshot.png
 chromedriver
+*.csv

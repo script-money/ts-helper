@@ -9,6 +9,7 @@ import pandas as pd
 from datetime import datetime
 from time import perf_counter
 import os
+import re
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
@@ -209,9 +210,9 @@ async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tupl
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
 
-async def get_codex() -> List[str]:
+async def get_codex() -> List[Tuple[str,str]]:
     """
-    获取所有包的ID
+    获取所有包的ID和名字
 
     Raises
     ------
@@ -219,7 +220,7 @@ async def get_codex() -> List[str]:
 
     Return
     ------
-    各包的 id 列表   
+    各包的 id & 名字 的列表   
     """
     url = base_market_url + "GetCodex="
     payload = {
@@ -235,7 +236,7 @@ async def get_codex() -> List[str]:
             r = await client.post(url, data=json.dumps(payload), headers=headers)
             response_json = r.json()
             set_ids = response_json['data']['getCodex']['codex']
-            return list(map(lambda s: s['set']['id'], set_ids))
+            return list(map(lambda s: (s['set']['id'], re.compile(r'\d_\w+').search(s['set']['assetPath']).group()), set_ids))
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
@@ -297,8 +298,8 @@ async def get_all_play_info():
     get_codex_result = None
     while get_codex_result is None:
         try:
-            set_ids = await get_codex()
-            for set_id in set_ids:
+            set_ids_and_names = await get_codex()
+            for set_id, _ in set_ids_and_names:
                 get_codex_set_result = None
                 while get_codex_set_result is None:
                     try:
@@ -344,7 +345,7 @@ async def get_all_play_info():
                     except Exception:
                         logger.info(f'获取 {set_id} 失败，重试')
 
-            get_codex_result = set_ids
+            get_codex_result = set_ids_and_names
 
             try:           
                 df.to_hdf(f'data/{datetime.now().strftime("%Y-%m-%d-%H")}.h5', key='play_infos', mode='w')
