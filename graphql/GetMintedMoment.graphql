@@ -1,0 +1,181 @@
+query GetMintedMoment($momentId: ID!) {
+  getMintedMoment(momentId: $momentId) {
+    data {
+      ...MomentDetails
+      play {
+        ... on Play {
+          ...PlayDetails
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}
+
+fragment MomentDetails on MintedMoment {
+  id
+  version
+  sortID
+  set {
+    id
+    flowName
+    flowSeriesNumber
+    setVisualId
+    __typename
+  }
+  setPlay {
+    ID
+    flowRetired
+    circulationCount
+    __typename
+  }
+  assetPathPrefix
+  play {
+    id
+    stats {
+      playerID
+      playerName
+      primaryPosition
+      teamAtMomentNbaId
+      teamAtMoment
+      dateOfMoment
+      playCategory
+      __typename
+    }
+    __typename
+  }
+  price
+  listingOrderID
+  flowId
+  owner {
+    dapperID
+    username
+    profileImageUrl
+    __typename
+  }
+  flowSerialNumber
+  forSale
+  __typename
+}
+
+fragment PlayDetails on Play {
+  id
+  description
+  stats {
+    playerID
+    playerName
+    primaryPosition
+    currentTeamId
+    dateOfMoment
+    jerseyNumber
+    awayTeamName
+    awayTeamScore
+    teamAtMoment
+    homeTeamName
+    homeTeamScore
+    totalYearsExperience
+    teamAtMomentNbaId
+    height
+    weight
+    currentTeam
+    birthplace
+    birthdate
+    awayTeamNbaId
+    draftYear
+    nbaSeason
+    draftRound
+    draftSelection
+    homeTeamNbaId
+    draftTeam
+    draftTeamNbaId
+    playCategory
+    homeTeamScoresByQuarter {
+      quarterScores {
+        type
+        number
+        sequence
+        points
+        __typename
+      }
+      __typename
+    }
+    awayTeamScoresByQuarter {
+      quarterScores {
+        type
+        number
+        sequence
+        points
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+  statsPlayerGameScores {
+    blocks
+    points
+    steals
+    assists
+    minutes
+    rebounds
+    turnovers
+    plusMinus
+    flagrantFouls
+    personalFouls
+    playerPosition
+    technicalFouls
+    twoPointsMade
+    blockedAttempts
+    fieldGoalsMade
+    freeThrowsMade
+    threePointsMade
+    defensiveRebounds
+    offensiveRebounds
+    pointsOffTurnovers
+    twoPointsAttempted
+    assistTurnoverRatio
+    fieldGoalsAttempted
+    freeThrowsAttempted
+    twoPointsPercentage
+    fieldGoalsPercentage
+    freeThrowsPercentage
+    threePointsAttempted
+    threePointsPercentage
+    __typename
+  }
+  statsPlayerSeasonAverageScores {
+    minutes
+    blocks
+    points
+    steals
+    assists
+    rebounds
+    turnovers
+    plusMinus
+    flagrantFouls
+    personalFouls
+    technicalFouls
+    twoPointsMade
+    blockedAttempts
+    fieldGoalsMade
+    freeThrowsMade
+    threePointsMade
+    defensiveRebounds
+    offensiveRebounds
+    pointsOffTurnovers
+    twoPointsAttempted
+    assistTurnoverRatio
+    fieldGoalsAttempted
+    freeThrowsAttempted
+    twoPointsPercentage
+    fieldGoalsPercentage
+    freeThrowsPercentage
+    threePointsAttempted
+    threePointsPercentage
+    __typename
+  }
+  __typename
+}

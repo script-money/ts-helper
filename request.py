@@ -312,7 +312,15 @@ async def get_all_play_info():
                                     result1 = await get_transactions(*id_pair)
                                     result2 = await get_transactions(*id_pair, by_highest=True)
                                     moment_listing = await get_moment_listings(*id_pair)
-                                    low_list_price = float(moment_listing[0]['moment']['price']) if len(moment_listing) != 0 else 0
+                                    low_list_price = 0
+                                    if len(moment_listing) != 0:
+                                        for moment_list in moment_listing:
+                                            moment_id = moment_list['moment']['id']
+                                            is_for_sale = await get_minted_moment_for_sale(moment_id)
+                                            if is_for_sale:
+                                                low_list_price = float(
+                                                    moment_list['moment']['price'])
+                                                break
                                     recent_transaction = result1[0]
                                     highest_transaction = result2[0]
                                     df = df.append({
@@ -379,6 +387,37 @@ async def get_codex_info() -> Dict[str, Tuple[str, str]]:
                 set_info_dict[i['set']['id']] = (i['set']['flowName'], i['set']
                                                  ['setVisualId'].split('_')[-1])
             return set_info_dict
+    except Exception as e:
+        logger.warning(f"httpx request error: {e}")
+        raise HttpxRequestException
+
+
+async def get_minted_moment_for_sale(moment_id) -> bool:
+    """
+    获取moment是否for sale
+
+    Raises
+    ------
+    HttpxRequestException
+
+    Return
+    ------
+    返回bool
+    """
+    url = base_market_url + "GetMintedMoment"
+    payload = {
+        "operationName": "GetMintedMoment",
+        "variables": {
+            "momentId": moment_id
+        },
+        "query": open('graphql/GetMintedMoment.graphql').read()
+    }
+    try:
+        async with httpx.AsyncClient() as client:
+            r = await client.post(url, data=json.dumps(payload), headers=headers)
+            response_json = r.json()
+            moment_details = response_json['data']['getMintedMoment']['data']
+            return moment_details['forSale']
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
