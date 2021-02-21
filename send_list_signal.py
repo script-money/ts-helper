@@ -4,7 +4,6 @@ import json
 import time
 import zmq
 from typing import List, Dict
-from datetime import datetime
 import logging
 from loggers import setup_logging_pre
 # asyncio.log.logger.setLevel(logging.ERROR)
@@ -12,8 +11,11 @@ from loggers import setup_logging_pre
 logger = logging.getLogger(__name__)
 
 BYSET = "208ae30a-a4fe-42d4-9e51-e6fd1ad2a7a9" # base series 2
-BYPLAYERS = "1629634"  # clarke
-TARGET_PRICE = 17
+# BYPLAYERS = "1629634"  # clarke
+# BYPLAYERS = "1628365"  # fultz
+BYPLAYERS = "203915"  # dinwiddie
+
+TARGET_PRICE = 25
 
 # USER_ID = 'auth0|5ff10ff500625e0068d1855f'  # Crypto_Goya
 USER_ID = 'auth0|5ff110779d0613006feebba4'  # multivac
@@ -36,7 +38,7 @@ gql_dict = {
             "pagination": {
                 "cursor": "", 
                 "direction": "RIGHT", 
-                "limit": 50 
+                "limit": 100 
             }
         }
     },
@@ -77,6 +79,6 @@ def main():
                 r.set(signal, 1)
             else:
                 logger.info(f'{signal} has sent, skip')
-            time.sleep(10)
+            # time.sleep(10)
 
 main()

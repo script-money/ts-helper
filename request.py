@@ -421,3 +421,50 @@ async def get_minted_moment_for_sale(moment_id) -> bool:
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
+
+
+async def search_not_for_sale_moments(user_dapper_id, by_sets:List) -> List:
+    """
+    获取my moment中没有上架的moment列表，用于上架
+
+    Raises
+    ------
+    HttpxRequestException
+
+    Return
+    ------
+    返回类型为 MintedMoment 的 List
+    """
+    url = base_market_url + "SearchMintedMoments"
+    payload = {
+        "operationName": "SearchMintedMoments",
+        "variables": {
+            "sortBy": "ACQUIRED_AT_DESC",
+            "byOwnerDapperID": [
+                user_dapper_id
+            ],
+            "bySets": by_sets,
+            "bySeries": [],
+            "bySetVisuals": [],
+            "byPlayers": [],
+            "byPlays": [],
+            "byTeams": [],
+            "byForSale": "NOT_FOR_SALE",
+            "searchInput": {
+                "pagination": {
+                    "cursor": "",
+                    "direction": "RIGHT",
+                    "limit": 1000
+                }
+            }
+        },
+        "query": open('graphql/GetMintedMoment.graphql').read()
+    }
+    try:
+        async with httpx.AsyncClient() as client:
+            r = await client.post(url, data=json.dumps(payload), headers=headers)
+            response_json = r.json()
+            return response_json['data']['searchMintedMoments']['data']['searchSummary']['data']['data']
+    except Exception as e:
+        logger.warning(f"httpx request error: {e}")
+        raise HttpxRequestException

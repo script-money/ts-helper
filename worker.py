@@ -168,7 +168,8 @@ class Worker:
             )
             price_input.send_keys(targetPrice)
             time.sleep(1)
-            submit_sale_button = self.driver.find_element_by_xpath("//button[@type='submit']")
+            submit_sale_button = self.driver.find_element_by_xpath(
+                "//button[@class='ButtonBase__StyledButton-sc-1qgxh2e-0 gjCpfL Button__StyledButton-ig3kkl-1 dQJcuA']")
             submit_sale_button.click()
             confirm_button = self.wait.until(
                 EC.element_to_be_clickable(

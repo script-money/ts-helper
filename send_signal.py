@@ -21,6 +21,7 @@ def main():
             logger.info(f"send: {signal}")
             socket.send_string(signal)
             # docker exec -it redis redis-cli FLUSHALL && python send_buy_signal.py
+            # docker exec -it celery-redis redis-cli FLUSHALL
             # docker run -p 6379:6379 --name redis redis
             r.set(signal, 1)
         else:
