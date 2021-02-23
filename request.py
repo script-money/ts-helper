@@ -10,6 +10,7 @@ from datetime import datetime
 from time import perf_counter
 import os
 import re
+from pytz import timezone
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
@@ -288,11 +289,7 @@ async def get_all_play_info():
     if not os.path.exists('data'):
         os.makedirs('data')
 
-    try:
-        df = pd.read_hdf(
-            f'data/{datetime.now().strftime("%Y-%m-%d-%H")}.h5', key='play_infos')
-    except:
-        df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
+    df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
                                    "circulation_count", "adjust_volume", "recent_transaction", 
                                    "highest_transaction", "low_list_price"])
     get_codex_result = None
@@ -347,8 +344,10 @@ async def get_all_play_info():
 
             get_codex_result = set_ids_and_names
 
-            try:           
-                df.to_hdf(f'data/{datetime.now().strftime("%Y-%m-%d-%H")}.h5', key='play_infos', mode='w')
+            try:    
+                bj_time_now = datetime.now().astimezone(
+                    timezone('Asia/ShangHai')).strftime("%Y-%m-%d-%H")
+                df.to_hdf(f'data/{bj_time_now}.h5', key='play_infos', mode='w')
             except Exception as e:
                 logger.error(f'保存hdf失败，错误是{e}')
         except:
