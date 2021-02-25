@@ -291,7 +291,7 @@ async def get_all_play_info():
 
     df = pd.DataFrame(columns=["set_id", "play_id", "player", "jersey_number",
                                    "circulation_count", "adjust_volume", "recent_transaction", 
-                                   "highest_transaction", "low_list_price"])
+                                   "highest_transaction", "low_list_price", "list_detail"])
     get_codex_result = None
     while get_codex_result is None:
         try:
@@ -311,6 +311,7 @@ async def get_all_play_info():
                                     result2 = await get_transactions(*id_pair, by_highest=True)
                                     moment_listing = await get_moment_listings(*id_pair)
                                     low_list_price = 0
+                                    list_detail = []
                                     if len(moment_listing) != 0:
                                         for moment_list in moment_listing:
                                             moment_id = moment_list['moment']['id']
@@ -319,6 +320,8 @@ async def get_all_play_info():
                                                 low_list_price = float(
                                                     moment_list['moment']['price'])
                                                 break
+                                        list_detail = map(
+                                            lambda i: (i['moment']['flowSerialNumber'], i['moment']['price']), moment_listing)
                                     recent_transaction = result1[0]
                                     highest_transaction = result2[0]
                                     df = df.append({
@@ -330,7 +333,8 @@ async def get_all_play_info():
                                         "adjust_volume": result1[1],
                                         "recent_transaction": recent_transaction,
                                         "highest_transaction": highest_transaction,
-                                        "low_list_price": low_list_price
+                                        "low_list_price": low_list_price,
+                                        "list_detail": list_detail,                                        
                                     }, ignore_index=True)
                                     result = True
                                     logger.info(
