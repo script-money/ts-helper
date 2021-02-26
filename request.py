@@ -136,7 +136,7 @@ async def get_moment_listings(set_id, play_id) -> List:
         raise HttpxRequestException
 
 
-async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tuple[int, float]], float, int, str, int]:
+async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tuple[int, float, str]], float, int, str, int]:
     """
     获取50条交易信息，返回辅助判断交易的参数
 
@@ -153,7 +153,7 @@ async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tupl
     Return
     ------
     (recent_transactions, adjust_volume, circulation_count, jerseyNumber)
-        recent_transactions: (序号,价格)的列表。类型为 List[Tuple[int, float]],  
+        recent_transactions: (序号,价格,买家名)的列表。类型为 List[Tuple[int, float, str]],  
         adjust_volume: 日成交量, 8位小数
         circulation_count: 该play的总供应量
         player: 球员名
@@ -196,7 +196,8 @@ async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tupl
             marketplace_transactions = response_json['data']['searchMarketplaceTransactions']['data']['searchSummary']['data']['data']
             if len(marketplace_transactions) == 0:
                 return [],0,0,'',-1
-            recent_transactions = list(map(lambda i: (int(i['moment']['flowSerialNumber']), float(i['price'])), marketplace_transactions))
+            recent_transactions = list(map(lambda i: (int(i['moment']['flowSerialNumber']), float(
+                i['price']), i['buyer']['Highkitties']), marketplace_transactions))
             adjust_volume = 0
             if not by_highest: # 用最近成交的排序来计算成交量
                 adjust_volume = calculate_adjust_volume(
