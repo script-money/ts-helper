@@ -197,7 +197,7 @@ async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tupl
             if len(marketplace_transactions) == 0:
                 return [],0,0,'',-1
             recent_transactions = list(map(lambda i: (int(i['moment']['flowSerialNumber']), float(
-                i['price']), i['buyer']['Highkitties']), marketplace_transactions))
+                i['price']), i['buyer']['username']), marketplace_transactions))
             adjust_volume = 0
             if not by_highest: # 用最近成交的排序来计算成交量
                 adjust_volume = calculate_adjust_volume(
