@@ -321,8 +321,8 @@ async def get_all_play_info():
                                                 low_list_price = float(
                                                     moment_list['moment']['price'])
                                                 break
-                                        list_detail = map(
-                                            lambda i: (i['moment']['flowSerialNumber'], i['moment']['price']), moment_listing)
+                                        list_detail = list(map(
+                                            lambda i: (i['moment']['flowSerialNumber'], i['moment']['price']), moment_listing))
                                     recent_transaction = result1[0]
                                     highest_transaction = result2[0]
                                     df = df.append({
