@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import List, Tuple
+import os
 
 moment_info_type = Tuple[List[Tuple[int, int]], float, int, str, int]
 
@@ -88,3 +89,20 @@ def calculate_reasonable_price(recent_transactions, adjust_volume, circulation_c
     return 0.0
 
 
+def get_last_file(path: str, contain: str=''):
+    '''
+    获取文件夹中最新文件路径
+
+    Parameters
+    ----------
+    path: 子文件夹名
+    contain: 包含字段
+    
+    Return
+    ------
+    最新文件路径 
+    '''
+    files = os.listdir(path)
+    paths = [os.path.join(path, basename)
+             for basename in files if contain in basename]
+    return max(paths, key=os.path.getctime)
