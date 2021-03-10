@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import List, Tuple
 import os
+import pandas as pd
 
 moment_info_type = Tuple[List[Tuple[int, int]], float, int, str, int]
 
@@ -106,3 +107,27 @@ def get_last_file(path: str, contain: str=''):
     paths = [os.path.join(path, basename)
              for basename in files if contain in basename]
     return max(paths, key=os.path.getctime)
+
+
+def load_targets_config(file) -> List:
+    '''
+    读取目标价配置文件
+
+    Parameters
+    ----------
+    file: csv路径
+    
+    Return
+    ------
+    目标列表 
+    '''
+    df = pd.read_csv(file)
+    df = df[~df['目标价'].isnull()]
+    targets = []
+    for row in df.iterrows():
+        url = row[-1]['页面地址']
+        target_price = int(row[-1]['目标价'])
+        set_id:str = url[40:76]
+        play_id:str = url[77:]
+        targets.append((set_id, play_id, target_price))
+    return targets

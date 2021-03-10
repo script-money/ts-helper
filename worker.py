@@ -126,6 +126,9 @@ class Worker:
                 except:
                     self.driver.execute_script("window.scrollBy(0,100)")
                     pass
+            # 点击购买超时确认
+            self.driver.find_element_by_xpath(
+                "//span[contains(text(),'Continue To Purchase')]").click()
             self.wait.until(
                 EC.presence_of_element_located(
                     (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
@@ -136,7 +139,7 @@ class Worker:
                     (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
             )
             logger.info(
-                f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
+                f'打开 {set_ID}+{play_ID}?serialNumber={serial_number} 页面成功')
         except Exception as e:
             logger.warning(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 失败, 错误是{e}')
@@ -176,7 +179,7 @@ class Worker:
                     (By.XPATH, "//button[contains(text(), 'Confirm')]"))
             )
             confirm_button.click()
-            time.sleep(5)
+            time.sleep(30)
             logger.info(f"上架完成，回到准备状态")
         except Exception as e:
             logger.warn(f'上架 {moment_id} 出现异常: {e}')
