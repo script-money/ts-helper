@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import zmq
-from typing import List
+from typing import List, Tuple
 import time
 import redis
 import random
@@ -12,11 +12,11 @@ from loggers import setup_logging_pre
 
 logger = logging.getLogger(__name__)
 
-def get_target_number(old_list, new_list=None, target_price=1) -> List:
+def get_target_number(old_list, new_list=None, target_price=1) -> List[Tuple[str, int, int]]: 
     if new_list is None:
         filter_by_price_single = filter(lambda n: float(
             n['moment']['price']) <= target_price, old_list)
-        return list(map(lambda n: n['moment']['flowSerialNumber'], filter_by_price_single))
+        return list(map(lambda n: (n['moment']['flowSerialNumber'], target_price, int(float(n['moment']['price']))), filter_by_price_single))
 
     filter_listings = filter(
         lambda n: n['id'] not in map(lambda j: j['id'], old_list),
@@ -24,19 +24,25 @@ def get_target_number(old_list, new_list=None, target_price=1) -> List:
     )
     filter_by_price = filter(lambda n: float(
         n['moment']['price']) <= target_price, filter_listings)
-    return list(map(lambda n: n['moment']['flowSerialNumber'], filter_by_price))
+    return list(map(lambda n: (n['moment']['flowSerialNumber'], target_price, int(float(n['moment']['price']))), filter_by_price))
 
 
 async def process(set_id, play_id, target_price, socket, redis_client):
     moment_listings_new = await get_moment_listings(set_id, play_id)
-    buy_number_list = get_target_number(
+    target_infos = get_target_number(
         moment_listings_new, target_price=target_price)
-    if len(buy_number_list) != 0:
-        for n in buy_number_list: # 测试时加上[:1]
-            # 对序号进行筛选
-            low_number = 500
-            if int(n) >= low_number:
-                logger.info(f"号码大于{low_number}，跳过")
+
+    if len(target_infos) != 0:
+        for target_info in target_infos:  # 测试时加上[:1]
+            number, target_price, market_price = target_info[0], target_info[1], target_info[2]
+            # 小于目标价20%的直接秒
+            if market_price > target_price * (1-0.2):
+                # 对序号进行筛选，小于500的就买
+                low_number = 500
+                if int(number) >= low_number:
+                    logger.info(
+                        f"号码是{number}，目标价{target_price}, 现价{market_price}, 跳过")
+                    continue
                 continue
             signal = '0'+' '+set_id+' '+play_id+' '+ n
             if redis_client.get(signal) is None:

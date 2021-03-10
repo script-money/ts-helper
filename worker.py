@@ -139,7 +139,7 @@ class Worker:
                     (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
             )
             logger.info(
-                f'打开 {set_ID}+{play_ID}?serialNumber={serial_number} 页面成功')
+                f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:
             logger.warning(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 失败, 错误是{e}')
