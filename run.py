@@ -35,8 +35,8 @@ def main():
     return_code = 1
     try:
         load_dotenv('.env')
-        max_thread = 1 # 开几个selenium
-        queue_size = 1
+        max_thread = 2 # 开几个selenium
+        queue_size = 5
         logger.info(
             f'selenium worker number is {max_thread}, task queue size is {queue_size}')
         queue_instance = queue.Queue(queue_size)
@@ -60,7 +60,7 @@ def main():
             msg = socket.recv()
             logger.info(f"recieve message: {msg}")
             try:
-                queue_instance.put(msg, block=True, timeout=5)
+                queue_instance.put(msg, block=False)
             except queue.Full:
                 logger.warning('Task queue is full')                
     except KeyboardInterrupt:

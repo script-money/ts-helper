@@ -11,6 +11,7 @@ from time import perf_counter
 import os
 import re
 from pytz import timezone
+from statistics import median
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
@@ -473,3 +474,39 @@ async def search_not_for_sale_moments(user_dapper_id, by_sets:List) -> List:
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
+
+
+async def load_targets_config(file) -> List[Tuple[str, str, int, float]]:
+    '''
+    读取目标价配置文件
+
+    Parameters
+    ----------
+    file: csv路径
+    
+    Return
+    ------
+    目标信息列表 
+    '''
+    df = pd.read_csv(file)
+    targets_info: List[Tuple[str, str, int, float]] = []
+    for row in df.iterrows():
+        url = row[-1]['页面地址']
+        total_le = int(row[-1]['总数'])
+        set_id: str = url[40:76]
+        play_id: str = url[77:]
+        result = None
+        recent_market_info = []
+        while result is None:
+            try:
+                recent_market_info = await get_transactions(set_id, play_id)
+                result = True
+            except:
+                logger.info(
+                    f"获取 {set_id}+{play_id} 最近交易失败，重试")
+        recent_three_transactions = recent_market_info[0][:3]
+        price = median(map(lambda n:n[1] ,recent_three_transactions))
+        logger.info(
+            f"loading: {(set_id, play_id, total_le, price)}")
+        targets_info.append((set_id, play_id, total_le, price))
+    return targets_info

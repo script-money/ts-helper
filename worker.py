@@ -28,6 +28,7 @@ class Worker:
         self.password = password
         self.username = ""
         self.headless = False
+        self.buy_mode = False # 如果只打开页面，不下单购买，设置为False
         capa = DesiredCapabilities.CHROME
         chrome_options = Options()
         if self.headless:
@@ -111,33 +112,36 @@ class Worker:
             tab = self.driver.window_handles[-1]
             self.driver.switch_to.window(tab)
             self.driver.get(moment_listings_url)
+            # TODO 有可能会要sign in
             # 瞬间页里点击购买
-            element_buy = self.wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//button[@data-testid='button-p2p-purchase-moment']/span[text()[contains(.,'Buy for')]]"))
-            )
-            self.driver.execute_script("window.scrollBy(0,100)")
-            # 点不到的滚轮下滑页面
-            result = None
-            while result is None:
-                try:
-                    element_buy.click()
-                    result = True
-                except:
-                    self.driver.execute_script("window.scrollBy(0,100)")
-                    pass
-            # 点击购买超时确认
-            self.driver.find_element_by_xpath(
-                "//span[contains(text(),'Continue To Purchase')]").click()
-            self.wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
-            )
-            self.driver.find_element_by_xpath("//button[@type='button']").click()
-            self.wait.until(
-                EC.presence_of_element_located(
-                    (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
-            )
+            if self.buy_mode:
+                element_buy = self.wait.until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, "//button[@data-testid='button-p2p-purchase-moment']/span[text()[contains(.,'Buy for')]]"))
+                )
+                self.driver.execute_script("window.scrollBy(0,100)")
+
+                result = None
+                while result is None:
+                    try:
+                        element_buy.click()
+                        result = True
+                    except:
+                        self.driver.execute_script("window.scrollBy(0,100)")
+                        pass
+
+                self.driver.find_element_by_xpath(
+                    "//span[contains(text(),'Continue To Purchase')]").click()
+                self.wait.until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
+                )
+                self.driver.find_element_by_xpath("//button[@type='button']").click()
+                self.wait.until(
+                    EC.presence_of_element_located(
+                        (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
+                )
+            time.sleep(30)
             logger.info(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:
