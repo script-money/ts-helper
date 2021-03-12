@@ -9,7 +9,7 @@ import logging
 from request import load_targets_config
 from request import get_moment_listings
 from loggers import setup_logging_pre
-import pandas as pd
+import subprocess
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +28,9 @@ def get_target_number(old_list, new_list=None, target_price:float=1) -> List[Tup
     return list(map(lambda n: (n['moment']['flowSerialNumber'], target_price, float(n['moment']['price'])), filter_by_price))
 
 
-async def process(set_id, play_id, total_le, floor_price, socket, redis_client):
-    number_percentage = 1/10 # 前1/10视为小编号
-    margin = 0.05 # 接受floor价贵5%的小编号
-    discount = 0.15 # 比floor价低15%的无视编号直接秒
+async def process(set_id, play_id, sn_targets, floor_price, socket, redis_client):
+    margin = 0.1 # 接受floor价贵10%的特殊编号
+    discount = 0.1 # 比floor价低10%的无视编号直接秒
 
     moment_listings_new = await get_moment_listings(set_id, play_id)
     target_infos = get_target_number(
@@ -41,18 +40,14 @@ async def process(set_id, play_id, total_le, floor_price, socket, redis_client):
             number, target_price, market_price = target_info[0], target_info[1], target_info[2]
             
             if market_price > target_price * (1-(margin+discount)):
-                low_number = total_le * number_percentage
-                if int(number) >= low_number: # 如果是大编号
-                    logger.info(
-                        f"大编号：{number}，目标价{target_price:.0f}, 现价{market_price:.0f}, 跳过")
-                    continue
-                elif market_price > target_price:
-                    logger.info(
-                        f"小编号太贵：{number}，目标价{target_price:.0f}, 现价{market_price:.0f}, 跳过")
+                if number not in sn_targets:  # 如果目标编号不是特殊编号
+                    # logger.info(
+                    #     f"其他编号：{number}，目标价{target_price:.0f}, 现价{market_price:.0f}, 跳过")
                     continue
             signal = '0'+' '+set_id+' '+play_id+' ' + number
-            url = f"https://www.nbatopshot.com/listings/p2p/{set_id}+{play_id}?serialNumber={number}"
-            pd.Series([url]).to_clipboard(index=False) # 复制网址到剪切板
+            url = f"www.nbatopshot.com/listings/p2p/{set_id}+{play_id}?serialNumber={number}"
+            subprocess.run("pbcopy", universal_newlines=True,
+                           input=url)  # 复制到剪切板
             logger.info(
                 f"{set_id}-{play_id}的{number}，目标价{target_price:.0f}, 现价{market_price:.0f}, 进入购买")
             if redis_client.get(signal) is None:
@@ -78,6 +73,6 @@ async def main():
         except Exception as e:
             logger.warning(f"send_buy_signal错误:{e}")
         finally:
-            time.sleep(random.uniform(3,8))
+            time.sleep(random.uniform(8,20))
 
 asyncio.run(main())

@@ -1,6 +1,6 @@
 import httpx
 import logging
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Set
 from exceptions import HttpxRequestException
 from utils import calculate_adjust_volume
 import json
@@ -317,8 +317,8 @@ async def get_all_play_info():
                                     if len(moment_listing) != 0:
                                         for moment_list in moment_listing:
                                             moment_id = moment_list['moment']['id']
-                                            is_for_sale = await get_minted_moment_for_sale(moment_id)
-                                            if is_for_sale:
+                                            moment_info = await get_minted_moment_detail(moment_id)
+                                            if moment_info['forSale']:
                                                 low_list_price = float(
                                                     moment_list['moment']['price'])
                                                 break
@@ -398,9 +398,13 @@ async def get_codex_info() -> Dict[str, Tuple[str, str]]:
         raise HttpxRequestException
 
 
-async def get_minted_moment_for_sale(moment_id) -> bool:
+async def get_minted_moment_detail(moment_id) -> Dict:
     """
-    获取moment是否for sale
+    获取moment详情
+
+    Parameters
+    ----------
+    moment_id: 精彩瞬间的ID
 
     Raises
     ------
@@ -423,7 +427,7 @@ async def get_minted_moment_for_sale(moment_id) -> bool:
             r = await client.post(url, data=json.dumps(payload), headers=headers)
             response_json = r.json()
             moment_details = response_json['data']['getMintedMoment']['data']
-            return moment_details['forSale']
+            return moment_details
     except Exception as e:
         logger.warning(f"httpx request error: {e}")
         raise HttpxRequestException
@@ -476,7 +480,7 @@ async def search_not_for_sale_moments(user_dapper_id, by_sets:List) -> List:
         raise HttpxRequestException
 
 
-async def load_targets_config(file) -> List[Tuple[str, str, int, float]]:
+async def load_targets_config(file) -> List[Tuple[str, str, Set[str], float]]:
     '''
     读取目标价配置文件
 
@@ -489,24 +493,125 @@ async def load_targets_config(file) -> List[Tuple[str, str, int, float]]:
     目标信息列表 
     '''
     df = pd.read_csv(file)
-    targets_info: List[Tuple[str, str, int, float]] = []
+    targets_info: List[Tuple[str, str, Set[str], float]] = []
     for row in df.iterrows():
         url = row[-1]['页面地址']
-        total_le = int(row[-1]['总数'])
         set_id: str = url[40:76]
-        play_id: str = url[77:]
+        play_id: str = url[77:]       
+        sn_targets = set()
         result = None
         recent_market_info = []
         while result is None:
             try:
                 recent_market_info = await get_transactions(set_id, play_id)
+                moment_lists = await get_moment_listings(set_id, play_id)
+                example_moment_id = moment_lists[0]["moment"]["id"]
+                sn_targets = await get_numbers(example_moment_id)
                 result = True
             except:
-                logger.info(
-                    f"获取 {set_id}+{play_id} 最近交易失败，重试")
-        recent_three_transactions = recent_market_info[0][:3]
-        price = median(map(lambda n:n[1] ,recent_three_transactions))
+                pass
+        price = median(map(lambda n:n[1] ,recent_market_info[0]))
         logger.info(
-            f"loading: {(set_id, play_id, total_le, price)}")
-        targets_info.append((set_id, play_id, total_le, price))
+            f"loading: {(set_id, play_id, sn_targets, price)}")
+        targets_info.append((set_id, play_id, sn_targets, price))
     return targets_info
+
+
+async def get_numbers(play_id:str) -> Set[str]:
+    '''
+    输入play_id，获取特殊号码
+
+    Parameters
+    ----------
+    play_id: 动作id
+    
+    Return
+    ------
+    目标号码集合
+    '''
+    detail = await get_minted_moment_detail(play_id)
+    play_stats = detail['play']['stats']
+    le = detail['setPlay']['circulationCount']
+    jn = play_stats['jerseyNumber']
+    # 1. dateOfMoment -> 年/月+日
+    date_of_moment = play_stats['dateOfMoment']
+    date_of_moment_y = {date_of_moment[:4]}
+    date_of_moment_m_d = {str(int(date_of_moment[5:7] + date_of_moment[8:10]))}
+    # 2. totalYearsExperience
+    total_years_experience = {play_stats['totalYearsExperience']}
+    # 3. birthdate -> 年/月+日
+    birthdate = play_stats['birthdate']
+    birthdate_y = {birthdate[:4]}
+    birthdate_m_d = {str(int(birthdate[5:7] + birthdate[8:10]))}
+    # 4. draftYear
+    draft_year = {str(play_stats['draftYear'])}
+    # 5. jerseyNumber —> 球衣重复，5位数，从1-99都要，例如14 -> 114 or 144 or 140 or 1414 or 1144 or 1114 or 1444 or 1400 or 14000 or 14444 or 11444 or 11144 or 11114 or 14140 or 14141 or 41414
+
+    def cal_special_sn(number, le=35000):
+        digits = len(str(le))
+        numbers = set()
+        if len(number) == 1:  # 1位数的球衣号
+            numbers:Set[str] = {number * i for i in range(1, digits+1)}
+        if len(number) == 2:  # 2位数的球衣号
+            f = number[0]
+            l = number[1]
+
+            if digits == 2:
+                numbers = {f+l}
+            if digits == 3:
+                numbers = {f+l, f+f+l, f+l+l, f+l+'0'}
+            if digits == 4:
+                numbers = {f+l, f+f+l, f+l+l, f+l+'0', f+l+f, l+f+l,
+                           f+l+f+l, f+f+l+l, f+f+f+l, f+l+l+l, f+l+'0'+'0'}
+            if digits == 5:
+                numbers = {f+l, f+f+l, f+l+l, f+l+f, l+f+l, f+l+'0',
+                           f+l+f+l, f+f+l+l, f+f+f+l, f+l+l+l, f+l+'0'+'0',
+                           f+l+'0'+'0'+'0', f+f+l+'0'+'0', f+f+f+l+'0', f+l+l+l+l, f+f+l+l+l, f+f+f+l+l, f+f+f+f+l, f+l+f+l+'0', f+l+f+l+f, l+f+l+f+l}
+        return numbers
+
+    jersey_numbers = cal_special_sn(jn, le)  # {'', '1', '11', '111'}
+
+    # 6. 2连 3连 4连 5连
+    def cal_consecutive_sn(le=35000):
+        numbers = set()
+        digits = len(str(le))
+        for digit in range(2, digits+1):
+            for n in range(1, 10):
+                number = int(str(n)*digit)
+                numbers.add(str(number))
+        return numbers
+    consecutive_sns = cal_consecutive_sn(le)
+
+    # 7. 整数号 100,200...1000,2000...10000,20000
+    def cal_whole_sn(le=35000):
+        numbers = set()
+        digits = len(str(le))
+        for digit in range(2, digits):
+            for n in range(1, 10):
+                whole_number = n*(10**digit)
+                numbers.add(str(whole_number))
+        return numbers
+
+    whole_numbers = cal_whole_sn(le)
+
+    # 8. 完美号
+    perfect = {str(le)}
+
+    # 9. 小号数
+    small_numbers = set(
+        map(lambda s: str(s), filter(lambda i: i < le/10, range(1, le))))
+
+    fit_numbers = perfect | whole_numbers | consecutive_sns\
+        | jersey_numbers | draft_year | birthdate_m_d | birthdate_y\
+        | date_of_moment_m_d | date_of_moment_y | total_years_experience\
+        | small_numbers
+
+    return set( 
+        map(
+            lambda j: str(int(j)), 
+            filter(
+                lambda i: int(i) < le, 
+                fit_numbers
+            )
+        )
+    )
