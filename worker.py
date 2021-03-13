@@ -28,7 +28,7 @@ class Worker:
         self.password = password
         self.username = ""
         self.headless = False
-        self.buy_mode = False # 如果只打开页面，不下单购买，设置为False
+        self.buy_mode = True # 如果只打开页面，不下单购买，设置为False
         capa = DesiredCapabilities.CHROME
         chrome_options = Options()
         if self.headless:
@@ -40,7 +40,7 @@ class Worker:
         capa["pageLoadStrategy"] = "eager"
         self.driver = webdriver.Chrome(
             desired_capabilities=capa, chrome_options=chrome_options)
-        self.wait = WebDriverWait(self.driver, 60)
+        self.wait = WebDriverWait(self.driver, 300)
     def launch(self):
         logger.info(f"headless mode: {self.headless}")
         self.is_busy = True
@@ -141,7 +141,8 @@ class Worker:
                     EC.presence_of_element_located(
                         (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
                 )
-            time.sleep(30)
+            # TODO 改为pending消失
+            time.sleep(120)
             logger.info(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:

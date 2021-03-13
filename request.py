@@ -12,6 +12,7 @@ import os
 import re
 from pytz import timezone
 from statistics import median
+import sys
 
 asyncio.log.logger.setLevel(logging.ERROR)
 
@@ -91,7 +92,8 @@ async def get_new_list_default() -> List:
             response_json = r.json()
             return response_json['data']['searchMomentListings']['data']['searchSummary']['data']['data']
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(
+            f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -133,7 +135,7 @@ async def get_moment_listings(set_id, play_id) -> List:
                 return []
             return result['data']['momentListings']
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        # logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -210,7 +212,7 @@ async def get_transactions(set_id, play_id, by_highest=False) -> Tuple[List[Tupl
             jersey_number = int(first_moment['play']['stats']['jerseyNumber'])
             return recent_transactions, adjust_volume, circulation_count, player, jersey_number
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 async def get_codex() -> List[Tuple[str,str]]:
@@ -241,7 +243,7 @@ async def get_codex() -> List[Tuple[str,str]]:
             set_ids = response_json['data']['getCodex']['codex']
             return list(map(lambda s: (s['set']['id'], re.compile(r'\d_\w+').search(s['set']['assetPath']).group()), set_ids))
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -278,7 +280,7 @@ async def get_codex_set(set_id: str) -> List[Tuple[str,str]]:
             edition_slots = response_json['data']['getCodexSet']['codexSetWithEditions']['editionSlots']
             return list(map(lambda e: (e['edition']['set']['id'], e['edition']['play']['id']), edition_slots))
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -394,7 +396,7 @@ async def get_codex_info() -> Dict[str, Tuple[str, str]]:
                                                  ['setVisualId'].split('_')[-1])
             return set_info_dict
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -429,7 +431,7 @@ async def get_minted_moment_detail(moment_id) -> Dict:
             moment_details = response_json['data']['getMintedMoment']['data']
             return moment_details
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -476,7 +478,7 @@ async def search_not_for_sale_moments(user_dapper_id, by_sets:List) -> List:
             response_json = r.json()
             return response_json['data']['searchMintedMoments']['data']['searchSummary']['data']['data']
     except Exception as e:
-        logger.warning(f"httpx request error: {e}")
+        logger.warning(f"httpx request error({sys._getframe().f_code.co_name}): {e}")
         raise HttpxRequestException
 
 
@@ -494,10 +496,10 @@ async def load_targets_config(file) -> List[Tuple[str, str, Set[str], float]]:
     '''
     df = pd.read_csv(file)
     targets_info: List[Tuple[str, str, Set[str], float]] = []
-    for row in df.iterrows():
+    async def process_row(row):
         url = row[-1]['页面地址']
         set_id: str = url[40:76]
-        play_id: str = url[77:]       
+        play_id: str = url[77:]
         sn_targets = set()
         result = None
         recent_market_info = []
@@ -510,11 +512,17 @@ async def load_targets_config(file) -> List[Tuple[str, str, Set[str], float]]:
                 result = True
             except:
                 pass
-        price = median(map(lambda n:n[1] ,recent_market_info[0]))
+        # TODO 按25%小来计算
+        price = median(map(lambda n: n[1], recent_market_info[0]))
         logger.info(
             f"loading: {(set_id, play_id, sn_targets, price)}")
-        targets_info.append((set_id, play_id, sn_targets, price))
+        return set_id, play_id, sn_targets, price
+    
+    for result in await asyncio.gather(*[process_row(row) for row in df.iterrows()]):
+        targets_info.append(result)
+    logger.info("读取表格信息和市场价格完成")
     return targets_info
+
 
 
 async def get_numbers(play_id:str) -> Set[str]:
@@ -555,7 +563,6 @@ async def get_numbers(play_id:str) -> Set[str]:
         if len(number) == 2:  # 2位数的球衣号
             f = number[0]
             l = number[1]
-
             if digits == 2:
                 numbers = {f+l}
             if digits == 3:
@@ -599,7 +606,7 @@ async def get_numbers(play_id:str) -> Set[str]:
 
     # 9. 小号数
     small_numbers = set(
-        map(lambda s: str(s), filter(lambda i: i < le/10, range(1, le))))
+        map(lambda s: str(s), filter(lambda i: i < le/35, range(1, le))))
 
     fit_numbers = perfect | whole_numbers | consecutive_sns\
         | jersey_numbers | draft_year | birthdate_m_d | birthdate_y\

@@ -35,7 +35,7 @@ def main():
     return_code = 1
     try:
         load_dotenv('.env')
-        max_thread = 2 # 开几个selenium
+        max_thread = 1 # 开几个selenium
         queue_size = 5
         logger.info(
             f'selenium worker number is {max_thread}, task queue size is {queue_size}')
