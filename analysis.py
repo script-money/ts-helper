@@ -10,8 +10,9 @@ csv_path = './csv'
 
 async def generate_csv():
     def load_h5(path):
-        df_with_na = pd.read_hdf(path)
-        df = df_with_na[df_with_na['player'] != ""]  # 去掉player为na的
+        df = pd.read_hdf(path)
+        df = df[df['player'] != ""]  # 去掉player为na的
+        df = df[df['adjust_volume'] > 0.5] # 去掉日成交量不足0.5的
 
         def get_basic_value(df):
             recent_trans = df['recent_transaction']
@@ -47,9 +48,9 @@ async def generate_csv():
 
         # 计算占同球员其他play占比，获得百分比
         mean_player_group = df.groupby(['player']).mean()
-
+    
         def get_player_baseline_cap_ratio(df1):
-            cap = df1['baseline_cap']
+            cap = df1['baseline_cap']   
             target_mean = mean_player_group.loc[df1['player']]['baseline_cap']
             return cap/target_mean
         df['player_baseline_cap_ratio'] = df.apply(

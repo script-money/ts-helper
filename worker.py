@@ -137,12 +137,13 @@ class Worker:
                         (By.XPATH, "//div[contains(text(),'Pay with credit card')]"))
                 )
                 self.driver.find_element_by_xpath("//button[@type='button']").click()
-                self.wait.until(
+                WebDriverWait(self.driver, 30).until(
                     EC.presence_of_element_located(
                         (By.XPATH, "//span[@class='Label-sc-1c0wex9-0 bpIweo']"))
                 )
             # TODO 改为pending消失
-            time.sleep(120)
+            # TODO 有可能会购买失败
+            time.sleep(60)
             logger.info(
                 f'购买 {set_ID}+{play_ID}?serialNumber={serial_number} 成功')
         except Exception as e:
@@ -225,7 +226,6 @@ class Worker:
         except Exception as e:
             logger.warning(f'下架 {moment_id} 出现异常,错误为{e}')
         finally:
-            # TODO Message: invalid session id
             self.driver.close()
             time.sleep(1)
             self.switch_to_tab(0)

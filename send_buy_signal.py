@@ -30,8 +30,9 @@ def get_target_number(old_list, new_list=None, target_price: float = 1) -> List[
 
 async def process(set_id, play_id, sn_targets, floor_price, socket, redis_client):
     # TODO 改为绝对数值
-    margin = 0.2  # 接受floor价贵20%的特殊编号
-    discount = 0.3  # 比floor价低30%的无视编号直接秒
+    # TODO 设置价格过滤
+    margin = 0.15  # 接受floor价贵20%的特殊编号
+    discount = 0.15  # 比floor价低20%的无视编号直接秒
 
     moment_listings_new = await get_moment_listings(set_id, play_id)
     target_infos = get_target_number(
@@ -72,6 +73,7 @@ async def main():
     while True:
         try:
             # 循环获取最近上新 和缓存对比
+            # TODO default换成默认查询，否则太慢抢不到
             new_moments = await get_new_list_default()
             moments_will_search = []
 

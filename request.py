@@ -6,6 +6,7 @@ from utils import calculate_adjust_volume
 import json
 import asyncio
 import pandas as pd
+import numpy as np
 from datetime import datetime
 from time import perf_counter
 import os
@@ -512,8 +513,7 @@ async def load_targets_config(file) -> List[Tuple[str, str, Set[str], float]]:
                 result = True
             except:
                 pass
-        # TODO 按25%小来计算
-        price = median(map(lambda n: n[1], recent_market_info[0]))
+        price = np.percentile(list(map(lambda n: n[1], recent_market_info[0])),25)
         logger.info(
             f"loading: {(set_id, play_id, sn_targets, price)}")
         return set_id, play_id, sn_targets, price
