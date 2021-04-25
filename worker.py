@@ -1,6 +1,7 @@
 import undetected_chromedriver as uc
 uc.install()
 
+import os
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -28,9 +29,12 @@ class Worker:
         self.password = password
         self.username = ""
         self.headless = False
-        self.buy_mode = True # 如果只打开页面，不下单购买，设置为False
+        self.buy_mode = False # 如果只打开页面，不下单购买，设置为False
         capa = DesiredCapabilities.CHROME
         chrome_options = Options()
+        proxy_server = os.getenv('PROXY_URL')
+        if proxy_server != "" and proxy_server != None:
+            chrome_options.add_argument(f'--proxy-server={proxy_server}')
         if self.headless:
             chrome_options.add_argument('--headless')
             chrome_options.add_argument(

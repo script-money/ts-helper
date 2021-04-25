@@ -155,3 +155,5 @@ data/*.h5
 error_screenshot.png
 chromedriver
 *.csv
+
+csv/*.numbers
